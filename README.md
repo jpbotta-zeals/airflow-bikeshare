@@ -1,7 +1,7 @@
 # Airflow Bikeshare
 
 This repository contains an implementation of a data pipeline using Apache Airflow to process bikeshare system data. 
-The main goal is to extract trip data, transform it, and load it into a data warehouse for further analysis.
+The main goal is to extract trip data, transform it, and load it into GCP for further analysis.
 
 ## Project Structure
 
