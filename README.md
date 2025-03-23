@@ -16,12 +16,6 @@ The project is organized as follows:
 - **`docker-compose.yaml`**: Configuration file to orchestrate the necessary Docker services to run Airflow. It uses the default official Airflow file (https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml) plus some modifications to accomodate the project needs.
 - **`requirements.txt`**: Lists the Python dependencies required for the project.  
 
-## Scripts Details
-
-- **`dags/bikeshare_etl.py`**:
-- **`dags/scripts/init_gcp.py`**:
-- **`dags/scripts/data_extraction.py`**:
-
 ## Prerequisites
 
 Before getting started, ensure you have the following installed:
