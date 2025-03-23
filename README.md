@@ -61,7 +61,8 @@ Before getting started, ensure you have the following installed:
    Use Docker Compose to refresh configs and start the required services:
 
    ```bash
-   docker-compose up — build
+   docker-compose up airflow-init
+   docker-compose up
    ```
 
 2. **Access the Airflow web interface**:
