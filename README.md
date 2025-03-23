@@ -67,7 +67,7 @@ Before getting started, ensure you have the following installed:
 
 2. **Access the Airflow web interface**:
 
-   Open your browser and go to `http://localhost:8080` to access the Airflow UI.
+   Open your browser and go to `http://localhost:8080` to access the Airflow UI (user:airflow/pass:airflow).
 
 3. **Trigger the DAG**:
 
