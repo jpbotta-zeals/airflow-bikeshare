@@ -50,6 +50,7 @@ x-airflow-common:
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   #image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.5}
+  #### JPB - The following line allows docker-compose to use the specific Dockerfile in the directory.
   build: .
   environment:
     &airflow-common-env
@@ -72,8 +73,10 @@ x-airflow-common:
     # The following line can be used to set a custom config file, stored in the local config folder
     # If you want to use it, outcomment it and replace airflow.cfg with the name of your config file
     # AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
-    ####
+    #### JPB - The following line configures the default connection to GCP to use the service_accout key stored in '/config/service_account.json'.
     GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/config/service_account.json
+    #### 
+    #### JPB - The following 2 lines allow docker-compose to read and export environment variables from the '.env' file for easy management.
   env_file:
     .env
   volumes:

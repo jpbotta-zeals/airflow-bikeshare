@@ -16,7 +16,7 @@ The project is organized as follows:
 - **`docker-compose.yaml`**: Configuration file to orchestrate the necessary Docker services to run Airflow. It uses the default official Airflow file (https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml) plus some modifications to accomodate the project needs.
 - **`requirements.txt`**: Lists the Python dependencies required for the project.  
 
-## Files Specific Details
+## Scripts Details
 
 - **`dags/bikeshare_etl.py`**:
 - **`dags/scripts/init_gcp.py`**:
@@ -67,7 +67,7 @@ Before getting started, ensure you have the following installed:
 
 2. **Access the Airflow web interface**:
 
-   Open your browser and go to `http://localhost:8080` to access the Airflow UI (user:airflow/pass:airflow).
+   Open your browser and go to `http://localhost:8080` to access the Airflow UI.
 
 3. **Trigger the DAG**:
 
