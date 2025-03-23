@@ -3,13 +3,8 @@ from datetime import datetime, timedelta
 import pandas as pd
 import os, re
 
-PROJECT_ID=os.environ['PROJECT_ID']
-BUCKET_NAME=os.environ['BUCKET_NAME']
-LOCATION=os.environ['LOCATION']
-cfg_path = "config/bikeshare_pipeline.cfg"
-base_path = "data/bikeshare_pipeline"
-
-def _get_date():
+# Function to obtain extract date.
+def _get_date(cfg_path):
     pattern = r"EXTRACT_DATE=(\d{4}-\d{2}-\d{2})"
     with open(cfg_path, "r") as file:
         for line in file:
@@ -21,6 +16,7 @@ def _get_date():
                 extract_date=(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
     return extract_date
 
+# Function to extract data from `bikeshare_trips` by query using extract date.
 def _extract_data(dt):
     client = bigquery.Client()
     if str(dt) == '9999-01-01':
@@ -34,7 +30,9 @@ def _extract_data(dt):
         """
     return client.query(query).to_dataframe()
 
-def _create_parquet(df):
+# Function to create parquet files from the previously extracted data. 
+# Using start_time, extracting date and time, the data is grouped and split into the corresponding temp directories.
+def _create_parquet(df,base_path):
     df["start_time"] = pd.to_datetime(df["start_time"]) 
     df["dt"] = df["start_time"].dt.strftime("%Y-%m-%d")
     df["hr"] = df["start_time"].dt.strftime("%H")
@@ -49,25 +47,29 @@ def _create_parquet(df):
             engine="pyarrow",
             use_deprecated_int96_timestamps=True,
             index=False)
-        
-def _upload_gcs():
+
+# Function to upload parquet files into the corresponding bucket directories in GCS.
+def _upload_gcs(base_path,BUCKET_NAME,PROJECT_ID,LOCATION):
     storage_client = storage.Client()
     bucket = storage_client.bucket(BUCKET_NAME)
     bucket.project = PROJECT_ID
     bucket.location = LOCATION
 
-    for root, _, files in os.walk(base_path):
-        for file in files:
-            file_path = os.path.join(root, file)
+    for dirpath, dirnames, filenames in os.walk(base_path):
+        for file in filenames:
+            file_path = os.path.join(dirpath, file)
             gcs_file_path = file_path.replace(base_path, "bikeshare")
             blob = bucket.blob(gcs_file_path)
             blob.upload_from_filename(file_path)
 
-def _bikeshare_pipeline():
-    dt=_get_date()
+# Main function for data extraction. 
+# Once the data has been uploaded, the temporary directories are emptied.
+def _bikeshare_pipeline(BUCKET_NAME,PROJECT_ID,LOCATION,base_path,cfg_path,**kwargs):
+    dt=_get_date(cfg_path)
     df=_extract_data(dt)
-    _create_parquet(df)
-    _upload_gcs()
+    _create_parquet(df,base_path)
+    _upload_gcs(base_path,BUCKET_NAME,PROJECT_ID,LOCATION)
+    os.system(f"rm -rf {base_path}")
     
 
     
